@@ -19,7 +19,7 @@ def get_posts(db: Session = Depends(get_db)):
 def create_post(
     post: schemas.PostCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_editor)  # Protects the route
+    current_user: User = Depends(get_current_editor)
 ):
     db_post = Post(**post.dict(), created_by=current_user.id)
     db.add(db_post)
@@ -31,7 +31,7 @@ def create_post(
 def delete_post(
     post_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_editor)
 ):
     post = db.query(Post).filter(Post.id == post_id).first()
 
@@ -46,7 +46,7 @@ def delete_post(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to delete this post"
         )
-        
+         
     db.delete(post)
     db.commit()
     return

@@ -16,5 +16,4 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     role = Column(Enum(UserRole), default=UserRole.user, nullable=False)
 
-    # NEW: Add relationship to the Post model
     posts = relationship("Post", back_populates="owner")
