@@ -1,17 +1,15 @@
 from datetime import datetime, timedelta
 from typing import Optional
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from database import get_db
-from models.user import User
+from models.user import User, UserRole 
 import config as settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 def get_password_hash(password: str) -> str:
@@ -42,7 +40,6 @@ def get_current_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
@@ -52,8 +49,15 @@ def get_current_user(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         raise credentials_exception
     return user
+
+def get_current_editor(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role != UserRole.editor:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user does not have permissions for this action",
+        )
+    return current_user

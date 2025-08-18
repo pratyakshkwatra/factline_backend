@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://user:password@localhost:5432/cryptodb"
+    "DATABASE_URL", "postgresql://user:password@localhost:5432/factline"
 )
 
 SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")

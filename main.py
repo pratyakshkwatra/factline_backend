@@ -1,6 +1,11 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import auth
+from routes import post  
 
 app = FastAPI(
     title="Factline API",
@@ -17,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router, tags=["Auth"])
+app.include_router(post.router, tags=["Posts"])  
 
 @app.get("/")
 async def root():

@@ -1,6 +1,11 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Enum
 from sqlalchemy.orm import relationship
 from db_base import Base
+import enum
+
+class UserRole(enum.Enum):
+    user = "user"
+    editor = "editor"
 
 class User(Base):
     __tablename__ = "users"
@@ -9,7 +14,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
+    role = Column(Enum(UserRole), default=UserRole.user, nullable=False)
 
-    wallets = relationship(
-        "Wallet", back_populates="owner", cascade="all, delete-orphan"
-    )
+    # NEW: Add relationship to the Post model
+    posts = relationship("Post", back_populates="owner")
