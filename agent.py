@@ -180,15 +180,14 @@ class NewsCredibilityEngine:
                 pass
         return fallback
 
-# if __name__ == "__main__":
-#     import time
-#     start = time.time()
-#     detector = NewsCredibilityEngine(tavily_key=TAVILY_API_KEY)
-#     article = NewsArticle(
-#         title="Explosion Reported at Paris Metro Station, Casualties Feared",
-#         body="Paris, Sept 3 — Panic erupted in central Paris this morning after reports of a powerful explosion at a metro station. Eyewitnesses described hearing a loud blast followed by smoke billowing from underground entrances near the République area. Emergency services rushed to the scene, with unconfirmed local reports suggesting multiple casualties. Authorities have yet to issue an official statement, but metro services in the vicinity were reportedly halted as investigations began."
-#     )
 
-#     result = detector.analyze(article)
-#     print(json.dumps(result, indent=2))
-#     print(time.time() - start)
+
+
+
+
+
+
+
+
+
+

@@ -1,19 +1,11 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, EmailStr
-from datetime import datetime 
+from datetime import datetime
+from models.post_model import AnalysisStatus 
+
 
 class UserBase(BaseModel):
     email: EmailStr
-
-class UserCreate(UserBase):
-    password: str
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-
-class RefreshToken(BaseModel):
-    refresh_token: str
 
 class UserOut(UserBase):
     id: int
@@ -23,14 +15,6 @@ class UserOut(UserBase):
     class Config:
         orm_mode = True
 
-class Token(BaseModel):
-    access_token: str
-    refresh_token: str
-    token_type: str = "bearer"
-
-class TokenData(BaseModel):
-    sub: Optional[str] = None
-    role: Optional[str] = None
 
 class PostBase(BaseModel):
     title: str
@@ -42,7 +26,11 @@ class PostCreate(PostBase):
 class PostOut(PostBase):
     id: int
     created_at: datetime
-    owner: UserOut  
+    owner: UserOut
+
+    
+    analysis_status: AnalysisStatus
+    analysis: Optional[Dict[str, Any]] = None
 
     class Config:
         orm_mode = True

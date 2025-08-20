@@ -14,5 +14,5 @@ REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", 30))
 
 DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
