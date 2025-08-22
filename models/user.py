@@ -17,3 +17,7 @@ class User(Base):
     role = Column(Enum(UserRole), default=UserRole.user, nullable=False)
 
     posts = relationship("Post", back_populates="owner")
+    upvotes = relationship("Upvote", back_populates="user", cascade="all, delete-orphan")
+    downvotes = relationship("Downvote", back_populates="user", cascade="all, delete-orphan")
+    views = relationship("View", back_populates="user", cascade="all, delete-orphan")
+

@@ -71,12 +71,10 @@ def sign_in(user: UserLogin, db: Session = Depends(get_db)):
         "access_token": access_token,
         "refresh_token": refresh_token,
         "token_type": "bearer",
-        "user": {
-            "id": db_user.id,
-            "email": db_user.email,
-            "is_active": db_user.is_active,
-            "role": db_user.role.value,
-        },
+        "id": db_user.id,
+        "email": db_user.email,
+        "is_active": db_user.is_active,
+        "role": db_user.role.value,
     }
 
 @router.post("/refresh_token")
@@ -110,12 +108,10 @@ def refresh_token(refresh: RefreshToken, db: Session = Depends(get_db)):
         "access_token": new_access_token,
         "refresh_token": refresh_token,
         "token_type": "bearer",
-        "user": {
-            "id": db_user.id,
-            "email": db_user.email,
-            "is_active": db_user.is_active,
-            "role": db_user.role.value,
-        },
+        "id": db_user.id,
+        "email": db_user.email,
+        "is_active": db_user.is_active,
+        "role": db_user.role.value,
     }
 
 @router.post("/sign_out")
