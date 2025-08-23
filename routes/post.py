@@ -34,6 +34,19 @@ def create_post(
 
     return db_post
 
+@router.delete("/{post_id}")
+def delete_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_editor)
+):
+    db_session = next(get_db())
+    post = db_session.query(Post).filter(Post.id == post_id).first()
+    db_session.delete(post)
+    db_session.commit()
+
+    return {"message": "done"}
+
 def analyze_and_update_post(post_id: int):
     try:
         db_session = next(get_db())
@@ -141,8 +154,6 @@ def add_view(
     db.add(db_view)
     db.commit()
     return {"message": "View recorded"}
-
-
 
 @router.get("/breaking-news", response_model=List[schemas.PostOut])
 def get_breaking_news(
