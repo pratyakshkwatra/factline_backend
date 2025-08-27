@@ -11,7 +11,7 @@ from tavily import TavilyClient
 import json
 import re
 import enum
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from config import TAVILY_API_KEY
 from models.post_model import (
     Post,
@@ -21,8 +21,9 @@ from models.post_model import (
     TrustSignal,
     Claim,
     ClaimSource,
-    FactCheckSite
+    FactCheckSite,
 )
+from schemas import UserOut, PostOut
 
 class NewsArticle:
     def __init__(self, title: str, body: str, **extra):
@@ -104,11 +105,16 @@ class NewsCredibilityEngine:
             post.bias = out.get("bias")
             post.sentiment = out.get("sentiment")
             post.risk_type = out.get("risk_type")
-            
+
             alt_headlines = out.get("alternative_headlines", {})
             post.alt_headline_neutral = alt_headlines.get("neutral")
             post.alt_headline_sensational = alt_headlines.get("sensational")
             post.alt_headline_calm = alt_headlines.get("calm")
+
+            if "latitude" in out:
+                post.latitude = out.get("latitude")
+            if "longitude" in out:
+                post.longitude = out.get("longitude")
 
             self._update_related_tables(post, out)
 
@@ -124,10 +130,10 @@ class NewsCredibilityEngine:
         post.red_flags.clear()
         post.trust_signals.clear()
         post.claims.clear()
-        
+
         for tag in analysis_data.get("tags", []):
             post.tags.append(PostTag(tag=tag.lower()))
-        
+
         for flag in analysis_data.get("red_flags", []):
             post.red_flags.append(RedFlag(flag=flag))
 
@@ -142,13 +148,13 @@ class NewsCredibilityEngine:
                 reason=claim_data.get("reason"),
                 historical_context=claim_data.get("historical_context")
             )
-            
+
             for source_url in claim_data.get("sources", []):
                 new_claim.sources.append(ClaimSource(source_url=source_url))
-            
+
             for site_url in claim_data.get("fact_check_sites", []):
                 new_claim.fact_check_sites.append(FactCheckSite(site_url=site_url))
-            
+
             post.claims.append(new_claim)
 
         self.db.commit()
@@ -186,7 +192,8 @@ class NewsCredibilityEngine:
             "You should call web_search to fact-check. Return STRICT JSON only with keys: "
             "{'credibility_score': int, 'bias': str, 'sentiment': str, 'risk_type': str, 'red_flags': [str], "
             "'claims': [{'text': str, 'credibility_score': int, 'confidence': 'Low'|'Medium'|'High', 'reason': str, 'sources': [str], 'fact_check_sites':[str], 'historical_context': str}], "
-            "'trust_signals': [str], 'alternative_headlines': {'neutral': str, 'sensational': str, 'calm': str}}."
+            "'trust_signals': [str], 'alternative_headlines': {'neutral': str, 'sensational': str, 'calm': str}, "
+            "'latitude': float, 'longitude': float}."
         )
         usr = json.dumps({"article": article.to_dict(), "lite": lite}, ensure_ascii=False)
 
@@ -247,9 +254,12 @@ class NewsCredibilityEngine:
                 "red_flags": [],
                 "claims": [],
                 "trust_signals": [],
-                "alternative_headlines": {"neutral": "", "sensational": ""},
+                "alternative_headlines": {"neutral": "", "sensational": "", "calm": ""},
+                "latitude": None,
+                "longitude": None,
             },
         )
+
 
     def _parse_json(self, text: str, fallback: Dict[str, Any]) -> Dict[str, Any]:
         if not text:

@@ -52,6 +52,9 @@ class Post(Base):
     claims = relationship("Claim", back_populates="post", cascade="all, delete-orphan")
     trust_signals = relationship("TrustSignal", back_populates="post", cascade="all, delete-orphan")
 
+    latitude = Column(Float, nullable=True, index=True)
+    longitude = Column(Float, nullable=True, index=True)
+
 class PostTag(Base):
     __tablename__ = "post_tags"
 

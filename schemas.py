@@ -106,6 +106,9 @@ class PostOut(PostBase):
     claims: List[Claim]
     trust_signals: List[TrustSignal]
 
+    latitude: Optional[float]
+    longitude: Optional[float]
+
     is_upvoted: bool = False
     is_downvoted: bool = False
 
