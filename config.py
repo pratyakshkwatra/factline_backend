@@ -16,3 +16,4 @@ DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")

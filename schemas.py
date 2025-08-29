@@ -117,3 +117,12 @@ class PostOut(PostBase):
 
     class Config:
         from_attributes = True
+
+class GameQuery(BaseModel):
+    country: Optional[str]
+
+class GameArticle(BaseModel):
+    title: str
+    body: str
+    is_fake: bool
+    source_url: str
