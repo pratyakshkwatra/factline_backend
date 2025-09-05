@@ -1,5 +1,5 @@
 # Factline Backend API
 
 ---
-Made with 💜 by  [**Pratyaksh Kwatra**](https://github.com/pratyakshkwatra) & [**Aarav Rai**](https://github.com/Aarav-Rai) & Saisha Aggarwal & Srishti Yadav
+Made with 💜 by The Factline Team
 Fueled by ☕, powered by 🚀, and sprinkled with a bit of ✨ magic.
